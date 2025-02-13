@@ -4,8 +4,14 @@
 	import { readableStreamStore } from '$lib/readableStreamStore.svelte';
 	import { marked } from 'marked';
 	import DOMPurify from 'dompurify';
+	import ChatAppBar from '$lib/components/ChatAppBar.svelte';
+	// import hljs from 'highlight.js';
 
-	type MessageBody = { chats: { role: 'user' | 'assistant'; content: string }[] };
+	//type MessageBody = { chats: { role: 'user' | 'assistant'; content: string }[] };
+
+	let systemPrompt = $state('')
+	let examplePrompt = $state('')
+	let deepSeek = $state(false)
 
 	let chatHistory = $state(
 		typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('chatHistory') || '[]') : []
@@ -21,10 +27,18 @@
 
 	let responseText = $state('');
 
+	// Add this helper function
+function stripThinkTags(text: string): string {
+    const thinkRegex = /<think>[\s\S]*?<\/think>/g;
+    return text.replace(thinkRegex, '');
+}
+
 	$effect(() => {
 		if (response.text !== '') {
 			(async () => {
-				const parsedText = await marked.parse(response.text);
+				// Strip <think> tags from the response text
+				const cleanedText = stripThinkTags(response.text);
+				const parsedText = await marked.parse(cleanedText);
 				responseText = DOMPurify.sanitize(parsedText)
 					.replace(/<script>/g, '&lt;script&gt;')
 					.replace(/<\/script>/g, '&lt;/script&gt;');
@@ -53,7 +67,9 @@
 						'Content-Type': 'application/json'
 					},
 					body: JSON.stringify({
-						chats: chatHistory
+						chats: chatHistory,
+						systemPrompt,
+						deepSeek,
 					})
 				})
 			);
@@ -63,7 +79,8 @@
 			const answerText = (await answer) as string;
 
 			const parsedAnswer = await marked.parse(answerText)
-			const purifiedText = DOMPurify.sanitize(parsedAnswer)
+			const cleanedAnswer= stripThinkTags(parsedAnswer);
+			const purifiedText = DOMPurify.sanitize(cleanedAnswer)
 				.replace(/<script>/g, '&lt;script&gt;')
 				.replace(/<\/script>/g, '&lt;/script&gt;');
 
@@ -84,6 +101,11 @@
 </script>
 
 <main class="flex min-h-screen w-screen flex-col items-center bg-primary-50-950">
+	<!-- The app bar for this page -->
+	<ChatAppBar bind:selectedSystemPrompt={systemPrompt}
+	bind:selectedExamplePrompt={examplePrompt}
+	bind:deepSeek/>
+
 	<form onsubmit={handleSubmit} class="flex w-full max-w-7xl flex-col p-2 m-4 border-2 rounded-md border-primary-500">
 		<div class="space-y-4">
 			<div class="flex space-x-2">
@@ -139,6 +161,7 @@
 						placeholder="Type your message..."
 						name="message"
 						rows="3"
+						bind:value={examplePrompt}
 					></textarea>
 					<div class="flex flex-col justify-between">
 						<button type="submit" class="btn preset-filled-primary-500">Send</button>
