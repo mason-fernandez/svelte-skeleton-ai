@@ -40,11 +40,14 @@
 		"vite": "^6.0.0"
 	},
 	"dependencies": {
+		"@langchain/community": "^0.3.30",
 		"dompurify": "^3.2.3",
 		"highlight.js": "^11.11.1",
 		"lucide-svelte": "^0.474.0",
 		"marked": "^15.0.6",
+		"marked-highlight": "^2.2.1",
 		"openai": "^4.80.1",
+		"pdf-parse": "^1.1.1",
 		"weaviate-client": "^3.3.4"
 	}
 }

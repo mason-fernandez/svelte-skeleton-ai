@@ -4,16 +4,16 @@ import type { PageServerLoad } from '/$types'
 
 let client: WeaviateClient
 
-//thorteks thingy for custom port
-async function connectToWeaviate() : Promise <WeaviateClient> {
-    const clientPromise = weaviate.connectToCustom({
-        httpHost: 'localhost',
-        httpPort: 3700,
-        grcpHost: 'localhost',
-        grcpPort: 50054
-    });
-    return clientPromise;
-}
+// //thorteks thingy for custom port
+// async function connectToWeaviate() : Promise <WeaviateClient> {
+//     const clientPromise = weaviate.connectToCustom({
+//         httpHost: 'localhost',
+//         httpPort: 3700,
+//         grcpHost: 'localhost',
+//         grcpPort: 50051
+//     });
+//     return clientPromise;
+// }
 
 export const load: PageServerLoad = async () => {
     //thors thingy for custom port

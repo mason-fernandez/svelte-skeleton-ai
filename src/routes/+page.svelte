@@ -1,12 +1,23 @@
 <script lang="ts">
-    import { ProgressRing } from '@skeletonlabs/skeleton-svelte';
-  </script>
+  import { AppBar } from '@skeletonlabs/skeleton-svelte';
+  import ArrowLeft from 'lucide-svelte/icons/arrow-left';
+  import Paperclip from 'lucide-svelte/icons/paperclip';
+  import Calendar from 'lucide-svelte/icons/calendar';
+  import CircleUser from 'lucide-svelte/icons/circle-user';
+  import Github from 'lucide-svelte/icons/github';
+</script>
   
-
-  <div class="grid grid-cols-1 gap-4 justify-center">
-    <ProgressRing value={25} max={100} showLabel />
-  </div>
-
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://svelte.dev/docs/kit">svelte.dev/docs/kit</a> to read the documentation</p>
-<h1 class="text-pink-900">hihihihihihih</h1>
+<AppBar>
+  {#snippet lead()}
+    <CircleUser size={32} />
+    <span>370 AI App</span>
+    <div class="flex gap-2">
+      <button type="button" class="btn preset-filled-primary-500">Home</button>
+      <button type="button" class="btn preset-tonal-primary">Chatbot</button>
+      <button type="button" class="btn preset-outlined-primary-500">Weaviate</button>
+    </div>
+  {/snippet}
+  {#snippet trail()}
+    <Github size={20} />
+  {/snippet}
+</AppBar>
