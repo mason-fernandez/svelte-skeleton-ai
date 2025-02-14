@@ -9,12 +9,13 @@
 <nav>
 	<AppBar>
 		{#snippet lead()}
-		  <CircleUser size={32} />
-		  <span>370 AI App</span>
+		<a href="/"><CircleUser size={32} />
+		  <span class="h5">370 AI App</span></a>
+		  
 		  <div class="flex gap-2">
-			<a href="/"><button type="button" class="btn preset-filled-primary-500">Home</button></a>
-			<a href="/chat"><button type="button" class="btn preset-tonal-primary">Chatbot</button></a>
-			<a href="/check_readiness"><button type="button" class="btn preset-outlined-primary-500">Weaviate</button></a>
+			<a class="anchor" href="/">Home</a>
+			<a class="anchor" href="/chat">Chatbot</a>
+			<a class="anchor" href="/check_readiness">Weaviate</a>
 		  </div>
 		{/snippet}
 		{#snippet trail()}
