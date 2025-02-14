@@ -5,7 +5,7 @@
 <main class="flex flex-wrap flex-col justify-center gap-8 p-4">
 	<div class=" w-1/2 m-auto gap-4 p-4 bg-surface-900 rounded">
 		<h1 class="h1">Hey, I'm Mason</h1>
-		<p class="font-bold my-4">This is my website hosting a custom <a class="anchor" href="/chat">AI chatbot</a> featuring:</p>
+		<p class="font-bold my-4">This website hosts my custom <a class="anchor" href="/chat">AI chatbot</a> featuring:</p>
     <ul class="pl-4 list-inside list-disc space-y-2">
       <li>Model Selection (deepseek-r1, llama3.2)</li>
       <li>Custom Roles</li>
@@ -17,25 +17,27 @@
     <div>
       <h2 class="h2">Current Stack</h2>
     <p class="p">The current stack for this website is 
-      <a class="anchor" href="https://svelte.dev/" target="_blank">
+      <a class="underline" href="https://svelte.dev/" target="_blank">
         SvelteKit
       </a> as the metaframework, 
-      <a class="anchor" href="https://next.skeleton.dev/" target="_blank">
+      <a class="underline" href="https://next.skeleton.dev/" target="_blank">
         Skeleton.dev
       </a> for the UI,
-      <a class="anchor" href="https://ollama.com/" target="_blank">
+      <a class="underline" href="https://ollama.com/" target="_blank">
         Ollama
-      </a> for a localy hosted LLM, and 
-      <a class="anchor" href="https://weaviate.io/" target="_blank">
+      </a> for a locally hosted LLM, and 
+      <a class="underline" href="https://weaviate.io/" target="_blank">
         Weaviate
       </a> for RAG functionality</p>
     </div>
-    <div class="flex flex-row gap-4 p-4">
+    <div class="flex flex-row gap-8 p-4">
       <a class="anchor" href="https://svelte.dev/" target="_blank">
-        <img class="h-36 rounded-container" alt="Svelte Logo" src={"svelte.png"} />
+        <div class="w-30">
+          <img class="h-36 rounded-container" alt="Svelte Logo" src={"svelte.png"} />
+        </div>
       </a>
       <a class="anchor" href="https://next.skeleton.dev/" target="_blank">
-        <img class="h-36 rounded-container" alt="Skeleton Logo" src={"skeleton.png"} />
+        <img class="w-36 h-36 rounded-container" alt="Skeleton Logo" src={"skeleton.png"} />
       </a>
       <a class="anchor" href="https://ollama.com/" target="_blank">
         <div class="bg-white w-36 h-36 flex rounded-container justify-center">
