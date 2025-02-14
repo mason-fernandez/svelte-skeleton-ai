@@ -18,7 +18,7 @@
 		  </div>
 		{/snippet}
 		{#snippet trail()}
-		  <Github size={20} />
+		  <a href="https://github.com/mason-fernandez/svelte-skeleton-ai.git" target="_blank"><Github size={20} /></a>
 		{/snippet}
 	  </AppBar>
 </nav>
