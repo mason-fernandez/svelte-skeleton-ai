@@ -6,31 +6,32 @@
 	let { children } = $props();
 </script>
 
-<nav>
-	<AppBar>
-		{#snippet lead()}
-			<a href="/"
+<nav class="w-full bg-surface-900">
+	<div class="m-auto w-2/3 flex flex-row p-2 justify-between items-center">
+		<div class="flex flex-row items-center gap-4">
+			<a class="flex gap-2" href="/"
 				><CircleUser size={32} />
-				<span class="h5">370 AI App</span></a
+				</a
 			>
 
-			<div class="flex gap-2">
-				<a class="anchor" href="/">Home</a>
-				<a class="anchor" href="/chat">Chatbot</a>
-				<a class="anchor" href="/check_readiness">Weaviate</a>
+			<div class="flex gap-4">
+				<a class="anchor text-surface-100 font-semibold" href="/">Home</a>
+				<a class="anchor text-surface-100 font-semibold" href="/chat">Chatbot</a>
+				<a class="anchor text-surface-100 font-semibold" href="/check_readiness">Weaviate</a>
 			</div>
-		{/snippet}
-		{#snippet trail()}
-			<a
-				class="flex flex-row gap-2 bg-green-700 p-2 rounded"
-				href="https://github.com/mason-fernandez/svelte-skeleton-ai.git"
-				target="_blank"
-			>
-				<p>Github</p>
-				<Github size={20} />
-			</a>
-		{/snippet}
-	</AppBar>
+		</div>
+		
+		<a
+			class="flex flex-row items-center p-2 gap-2 bg-green-700 rounded"
+			href="https://github.com/mason-fernandez/svelte-skeleton-ai.git"
+			target="_blank"
+		>
+			<p>Github</p>
+			<Github size={20} />
+		</a>
+	</div>
+	
+		
 </nav>
 
 {@render children()}

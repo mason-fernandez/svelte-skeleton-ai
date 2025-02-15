@@ -188,6 +188,7 @@
 						></textarea>
 						<div class="flex flex-col justify-between">
 							<button type="submit" class="btn preset-filled-primary-500">Send</button>
+							<button type="button" class="btn preset-filled-primary-500">Upload</button>
 							<button type="button" class="btn preset-filled-secondary-500" onclick={deleteAllChats}
 								>Clear Chats</button
 							>
