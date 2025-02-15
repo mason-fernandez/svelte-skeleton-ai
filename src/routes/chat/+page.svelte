@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { Send, FileUp, MessageCircleX, XCircle } from 'lucide-svelte';
 	import { Avatar } from '@skeletonlabs/skeleton-svelte';
 	import TypingIndicator from '$lib/utils/typingIndicator.svelte';
 	import { readableStreamStore } from '$lib/readableStreamStore.svelte';
@@ -8,13 +9,21 @@
 	import ChatAppBar from '$lib/components/ChatAppBar.svelte';
 	import FileUploadAside from '$lib/components/FileUploadAside.svelte';
 
+	import { Modal } from '@skeletonlabs/skeleton-svelte';
+
+	let openState = $state(false);
+
+	function modalClose() {
+		openState = false;
+	}
+
 	import hljs from 'highlight.js';
 	import javascript from 'highlight.js/lib/languages/javascript';
 	import typescript from 'highlight.js/lib/languages/typescript';
 	import css from 'highlight.js/lib/languages/css';
 	hljs.registerLanguage('javascript', javascript);
 	hljs.registerLanguage('typescript', typescript);
-	hljs.registerLanguage('css', css)
+	hljs.registerLanguage('css', css);
 
 	const marked = new Marked(
 		markedHighlight({
@@ -24,7 +33,7 @@
 				return hljs.highlight(code, { language }).value;
 			}
 		})
-	)
+	);
 
 	let systemPrompt = $state('');
 	let examplePrompt = $state('');
@@ -116,87 +125,111 @@
 	}
 </script>
 
-<main class="flex min-h-screen w-screen flex-col items-center bg-primary-50-950">
-	<!-- The app bar for this page -->
-	<ChatAppBar
-		bind:selectedSystemPrompt={systemPrompt}
-		bind:selectedExamplePrompt={examplePrompt}
-		bind:deepSeek
-	/>
+<main class="flex flex-col flex-wrap justify-center gap-4 p-4">
+	<div class="m-auto w-1/2 gap-4 rounded bg-surface-900 p-4">
+		<ChatAppBar
+			bind:selectedSystemPrompt={systemPrompt}
+			bind:selectedExamplePrompt={examplePrompt}
+			bind:deepSeek
+		/>
 
-	<div class="flex w-full">
-		<FileUploadAside />
-		<form
-			onsubmit={handleSubmit}
-			class="m-4 flex flex-col rounded-md border-2 border-primary-500 p-2"
-		>
-			<div class="space-y-4">
-				<div class="flex space-x-2">
-					<Avatar src="/img-tutor-girl.png" name="Tutor girl image" />
-					<div class="assistant-chat">Hello! How can I help you?</div>
-				</div>
-				<!-- Need to display each chat item here -->
-				{#each chatHistory as chat, i}
-					{#if chat.role === 'user'}
-						<div class="ml-auto flex justify-end">
-							<div>
-								<Avatar src="/PikaThorAnime.png" name="User image" />
+		<div class="">
+			
+			<form
+				onsubmit={handleSubmit}
+				class=""
+			>
+				<div class="space-y-4">
+					<div class="flex space-x-2">
+						<Avatar src="/img-tutor-girl.png" name="Tutor girl image" />
+						<div class="assistant-chat">Hello! How can I help you?</div>
+					</div>
+					<!-- Need to display each chat item here -->
+					{#each chatHistory as chat, i}
+						{#if chat.role === 'user'}
+							<div class="ml-auto flex justify-end">
+								<div>
+									<Avatar src="/PikaThorAnime.png" name="User image" />
+								</div>
+								<div class="user-chat">
+									{chat.content}
+								</div>
 							</div>
-							<div class="user-chat">
-								{chat.content}
-							</div>
-						</div>
-						<!-- this else handles the assistant role chat display -->
-					{:else}
-						<div class="mr-auto flex">
-							<div>
-								<Avatar src="/img-tutor-girl.png" name="Tutor girl image" />
-							</div>
-							<div class="assistant-chat">
-								{@html chat.content}
-							</div>
-						</div>
-					{/if}
-				{/each}
-
-				{#if response.loading}
-					{#await new Promise((res) => setTimeout(res, 400)) then _}
-						<div class="flex">
-							<div class="flex space-x-2">
-								<Avatar name="tutor girl image" src={'/img-tutor-girl.png'} />
+							<!-- this else handles the assistant role chat display -->
+						{:else}
+							<div class="mr-auto flex">
+								<div>
+									<Avatar src="/img-tutor-girl.png" name="Tutor girl image" />
+								</div>
 								<div class="assistant-chat">
-									{#if response.text === ''}
-										<TypingIndicator />
-									{:else}
-										{@html responseText}
-									{/if}
+									{@html chat.content}
+								</div>
+							</div>
+						{/if}
+					{/each}
+
+					{#if response.loading}
+						{#await new Promise((res) => setTimeout(res, 400)) then _}
+							<div class="flex">
+								<div class="flex space-x-2">
+									<Avatar name="tutor girl image" src={'/img-tutor-girl.png'} />
+									<div class="assistant-chat">
+										{#if response.text === ''}
+											<TypingIndicator />
+										{:else}
+											{@html responseText}
+										{/if}
+									</div>
+								</div>
+							</div>
+						{/await}
+					{/if}
+					<div class="space-y-4">
+						<hr />
+						<div class="flex space-x-4">
+							<textarea
+								class="textarea"
+								required
+								placeholder="Type your message..."
+								name="message"
+								rows="3"
+								bind:value={examplePrompt}
+							></textarea>
+							<div class="flex flex-col justify-between">
+								<button type="submit" class="btn font-bold preset-filled-primary-500"
+									>Send<Send /></button
+								>
+								<div class="flex gap-1">
+									<Modal
+										bind:open={openState}
+										triggerBase="btn preset-tonal"
+										contentBase="card bg-surface-100-900 p-4 space-y-4 max-w-screen-sm"
+										backdropClasses=""
+									>
+										{#snippet trigger()}<FileUp />{/snippet}
+										{#snippet content()}
+											<div class="flex flex-col">
+												<div class="flex flex-row justify-between items-center">
+													<h2 class="h2">Upload File</h2>
+													<button type="button" class="btn" onclick={modalClose}>
+														<XCircle size={32}/>
+													</button>
+												</div>
+											
+												<FileUploadAside />
+											</div>
+										{/snippet}
+									</Modal>
+									<button type="button" class="btn preset-filled-error-500" onclick={deleteAllChats}
+										><MessageCircleX /></button
+									>
 								</div>
 							</div>
 						</div>
-					{/await}
-				{/if}
-				<div class="space-y-4">
-					<hr />
-					<div class="flex space-x-4">
-						<textarea
-							class="textarea"
-							required
-							placeholder="Type your message..."
-							name="message"
-							rows="3"
-							bind:value={examplePrompt}
-						></textarea>
-						<div class="flex flex-col justify-between">
-							<button type="submit" class="btn preset-filled-primary-500">Send</button>
-							<button type="button" class="btn preset-filled-primary-500">Upload</button>
-							<button type="button" class="btn preset-filled-secondary-500" onclick={deleteAllChats}
-								>Clear Chats</button
-							>
-						</div>
 					</div>
 				</div>
-			</div>
-		</form>
+			</form>
+		</div>
 	</div>
 </main>
 
@@ -217,7 +250,7 @@
 			@apply ml-4 list-inside list-disc;
 		}
 		/* Code blocks */
-	/* 	pre {
+		/* 	pre {
 			@apply my-4 overflow-x-auto rounded-lg bg-surface-700 p-4;
 		}
 		code {

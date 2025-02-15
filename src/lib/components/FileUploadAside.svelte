@@ -1,6 +1,8 @@
 <script lang="ts">
-
+    import { FileUpload, type FileUploadApi } from '@skeletonlabs/skeleton-svelte';
     let isSubmitted = false
+
+    let apiRef: FileUploadApi;
 
     function handleSubmit() {
         isSubmitted = true
@@ -9,13 +11,15 @@
 
 </script>
 
-<div class="flex flex-col items-center justify-start m-8">
+<div class="flex flex-col items-center justify-start">
     <form class="flex flex-col gap-4" method="POST" action="/chat?/uploadFile" enctype="multipart/form-data" onsubmit={handleSubmit}>
-        <h2>Choose the data file (in PDF format) you would like to upload</h2>
-        <label class="label">
-            <span class="label-text">Select a file</span>
-            <input class="input" type="file" accept=".pdf" name="file" />
-        </label>
-        <button class="btn preset-filled-primary-200-800" type="submit">Upload chosen file</button>
+        <p class="opacity-60">Choose the file (PDF only) that you would like to upload</p>
+        <section class="w-full space-y-4">
+            <FileUpload name="file" accept=".pdf" maxFiles={1} bind:internalApi={apiRef} />
+            <div class="flex justify-end gap-2">
+                <button type="button" class="btn preset-filled" onclick={apiRef.clearFiles}>Clear</button>
+                <button class="btn preset-filled-primary-200-800" type="submit">Upload</button>
+            </div>
+          </section>
     </form>
 </div>
