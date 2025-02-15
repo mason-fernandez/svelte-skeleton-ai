@@ -185,7 +185,6 @@
 						{/await}
 					{/if}
 					<div class="space-y-4">
-						<hr />
 						<div class="flex space-x-4">
 							<textarea
 								class="textarea"
@@ -195,11 +194,11 @@
 								rows="3"
 								bind:value={examplePrompt}
 							></textarea>
-							<div class="flex flex-col justify-between">
+							<div class="flex flex-col justify-around">
 								<button type="submit" class="btn font-bold preset-filled-primary-500"
 									>Send<Send /></button
 								>
-								<div class="flex gap-1">
+								<div class="flex gap-2">
 									<Modal
 										bind:open={openState}
 										triggerBase="btn preset-tonal"

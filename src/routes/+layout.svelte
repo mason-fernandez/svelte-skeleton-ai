@@ -6,7 +6,7 @@
 	let { children } = $props();
 </script>
 
-<nav class="w-full bg-surface-900">
+<nav class="relative w-full bg-surface-900">
 	<div class="m-auto w-2/3 flex flex-row p-2 justify-between items-center">
 		<div class="flex flex-row items-center gap-4">
 			<a class="flex gap-2" href="/"

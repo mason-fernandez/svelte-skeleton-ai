@@ -13,7 +13,7 @@
 
 <div class="flex flex-col items-center justify-start">
     <form class="flex flex-col gap-4" method="POST" action="/chat?/uploadFile" enctype="multipart/form-data" onsubmit={handleSubmit}>
-        <p class="opacity-60">Choose the file (PDF only) that you would like to upload</p>
+        <p class="opacity-60">Choose the <code class="code">.pdf</code> file that you would like to upload</p>
         <section class="w-full space-y-4">
             <FileUpload name="file" accept=".pdf" maxFiles={1} bind:internalApi={apiRef} />
             <div class="flex justify-end gap-2">

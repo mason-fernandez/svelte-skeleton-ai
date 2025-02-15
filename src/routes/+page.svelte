@@ -16,7 +16,7 @@
   <div class="flex flex-wrap align-center w-1/2 m-auto gap-4 p-4 bg-surface-900 rounded">
     <div>
       <h3 class="h3">Current Stack</h3>
-    <p class="p">The current stack for this website is 
+    <p class="p opacity-75">The current stack for this website is 
       <a class="underline" href="https://svelte.dev/" target="_blank">
         SvelteKit
       </a> as the metaframework, 
