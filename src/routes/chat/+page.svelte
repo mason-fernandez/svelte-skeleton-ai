@@ -127,6 +127,11 @@
 
 <main class="flex flex-col flex-wrap justify-center gap-4 p-4">
 	<div class="m-auto w-1/2 gap-4 rounded bg-surface-900 p-4">
+		<div>
+			<p>Chatting with:</p>
+			<Avatar src="/img-tutor-girl.png" name="Tutor girl image" />
+			<p></p>
+		</div>
 		<ChatAppBar
 			bind:selectedSystemPrompt={systemPrompt}
 			bind:selectedExamplePrompt={examplePrompt}
@@ -141,27 +146,20 @@
 			>
 				<div class="space-y-4">
 					<div class="flex space-x-2">
-						<Avatar src="/img-tutor-girl.png" name="Tutor girl image" />
-						<div class="assistant-chat">Hello! How can I help you?</div>
+						<div class="card p-4 preset-tonal rounded-tl-none my-2">Hello! How can I help you?</div>
 					</div>
 					<!-- Need to display each chat item here -->
 					{#each chatHistory as chat, i}
 						{#if chat.role === 'user'}
 							<div class="ml-auto flex justify-end">
-								<div>
-									<Avatar src="/PikaThorAnime.png" name="User image" />
-								</div>
-								<div class="user-chat">
+								<div class="card p-4 rounded-xl rounded-tr-none bg-primary-950 max-w-xl">
 									{chat.content}
 								</div>
 							</div>
 							<!-- this else handles the assistant role chat display -->
 						{:else}
 							<div class="mr-auto flex">
-								<div>
-									<Avatar src="/img-tutor-girl.png" name="Tutor girl image" />
-								</div>
-								<div class="assistant-chat">
+								<div class="card p-4 preset-tonal rounded-xl rounded-tl-none max-w-xl">
 									{@html chat.content}
 								</div>
 							</div>
@@ -172,7 +170,6 @@
 						{#await new Promise((res) => setTimeout(res, 400)) then _}
 							<div class="flex">
 								<div class="flex space-x-2">
-									<Avatar name="tutor girl image" src={'/img-tutor-girl.png'} />
 									<div class="assistant-chat">
 										{#if response.text === ''}
 											<TypingIndicator />
