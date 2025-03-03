@@ -1,4 +1,6 @@
 <script lang="ts">
+    import { Avatar } from "@skeletonlabs/skeleton-svelte"
+    import { Accordion } from '@skeletonlabs/skeleton-svelte';
     //let { selectedSystemPrompt = $bindable() } = $props()
     
 let systemPrompts = [
@@ -37,7 +39,8 @@ let systemPrompts = [
   
   <nav class="bg-primary-800 w-full p-4">
     <div class="container mx-auto flex items-center justify-between">
-      <div class="text-white font-bold text-xl">AI Chat Experiments</div>
+      <div class="text-white font-bold text-xl">Chatting with</div>
+      <Avatar src="PikaThorAnime.png" name="AI Pic" />
       
       <div class="flex items-center space-x-4">
         <!-- System Prompt Dropdown -->
@@ -46,6 +49,7 @@ let systemPrompts = [
             class="bg-secondary-900 text-white py-2 px-4 rounded-md"
             bind:value={selectedSystemPrompt}
           >
+          <option value="">Choose Role</option>
             {#each systemPrompts as prompt}
               <option value={prompt}>{prompt}</option>
             {/each}
@@ -58,18 +62,18 @@ let systemPrompts = [
             class="bg-secondary-900 text-white py-2 px-4 rounded-md"
             bind:value={selectedExamplePrompt}
           >
-            <option value="">Select an example prompt</option>
+            <option value="">Choose Model</option>
             {#each examplePrompts as prompt}
               <option value={prompt}>{prompt}</option>
             {/each}
           </select>
         </div>
   
-        <!-- JSON Mode Toggle -->
+        <!-- JSON Mode Toggle
         <div class="flex items-center">
           <span class="text-white mr-2">Use DeepSeek?</span>
-          <!-- svelte-ignore a11y_consider_explicit_label -->
-          <button
+          svelte-ignore a11y_consider_explicit_label -->
+          <!-- <button
             class={`w-12 h-6 rounded-full p-1 ${
               deepSeek ? 'bg-green-400' : 'bg-gray-400'
             }`}
@@ -81,7 +85,7 @@ let systemPrompts = [
               }`}
             ></div>
           </button>
-        </div>
+        </div> -->
       </div>
     </div>
   </nav>
@@ -90,6 +94,6 @@ let systemPrompts = [
     <div class="bg-yellow-100 p-4 mt-4">
       <p class="text-yellow-800">System Prompt: {selectedSystemPrompt}</p>
     </div>
-  {/if}
+{/if}
   
   
