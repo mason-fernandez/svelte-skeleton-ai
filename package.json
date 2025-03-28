@@ -12,7 +12,8 @@
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"format": "prettier --write .",
 		"lint": "prettier --check . && eslint .",
-		"localDockerRestart": "docker compose down && docker compose up --build -d && docker image prune -f"
+		"localDockerRestart": "docker compose down && docker compose up --build -d && docker image prune -f",
+		"defineEmbeddedFile": "npx tsx src/scripts/defineEmbeddedFile.ts"
 	},
 	"devDependencies": {
 		"@eslint/compat": "^1.2.5",
@@ -48,6 +49,6 @@
 		"marked-highlight": "^2.2.1",
 		"openai": "^4.80.1",
 		"pdf-parse": "^1.1.1",
-		"weaviate-client": "^3.3.4"
+		"weaviate-client": "^3.4.2"
 	}
 }
