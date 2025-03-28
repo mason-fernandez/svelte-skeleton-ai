@@ -5,10 +5,10 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 import { pipeline } from 'stream/promises'
 import fs from 'fs'
-import { WebPDFLoader } from '@langchain/community/document_loaders/web/pdf'
-import type { WeaviateClient } from 'weaviate-client'
-import weaviate from 'weaviate-client'
-import type { ChunkObject } from '$lib/types/ChunkObject'
+import { WebPDFLoader } from '@langchain/community/document_loaders/web/pdf';
+import type { WeaviateClient } from 'weaviate-client';
+import weaviate from 'weaviate-client';
+import type { ChunkObject } from '$lib/types/ChunkObject';
 
 const OPTIMAL_CHUNK_SIZE = 400 // tokens
 const CHUNK_OVERLAP = 50
@@ -18,34 +18,33 @@ let client: WeaviateClient
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
-const uploadPath =
-	process.env.NODE_ENV === 'production' ? '/uploads' : path.resolve(__dirname, '../../uploads')
+const uploadPath = process.env.NODE_ENV === 'production' ? '/uploads' : path.resolve(__dirname, '../../uploads')
 
-    export async function load() {
-        client = await weaviate.connectToLocal()
-    
-        const fileChunkCollection = client.collections.get<ChunkObject>('Chunks')
-        if (fileChunkCollection) {
-            const uniqueFileNames = new Set<string>()
-            let count = 0
-    
-            for await (const fileChunk of fileChunkCollection.iterator()) {
-                count++
-                uniqueFileNames.add(fileChunk.properties.file_name)
-            }
-    
-            return {
-                status: 200,
-                count,
-                fileNames: Array.from(uniqueFileNames) // Convert the Set to an array
-            }
-        } else {
-            return {
-                status: 404,
-                error: 'No collections found'
-            }
-        }
-    }
+export async function load() {
+	client = await weaviate.connectToLocal()
+
+	const fileChunkCollection = client.collections.get<ChunkObject>('Chunks')
+	if (fileChunkCollection) {
+		const uniqueFileNames = new Set<string>()
+		let count = 0
+
+		for await (const fileChunk of fileChunkCollection.iterator()) {
+			count++
+			uniqueFileNames.add(fileChunk.properties.file_name)
+		}
+
+		return {
+			status: 200,
+			count,
+			fileNames: Array.from(uniqueFileNames) // Convert the Set to an array
+		}
+	} else {
+		return {
+			status: 404,
+			error: 'No collections found'
+		}
+	}
+}
 
 export const actions = {
 	uploadFile: async ({ request }) => {
@@ -76,9 +75,9 @@ export const actions = {
 				await fsPromises.unlink(path.join(uploadPath, file))
 			}
 
-			// const timeStampSuffix = Date.now();
-			// const fileNameOnly = uploadedFile.name.replace('.pdf', '');
-			const uploadedFilePath = path.join(uploadPath, uploadedFile.name)
+            //const timeStampSuffix = Date.now();
+			//const fileNameOnly = uploadedFile.name.replace('.pdf', '');
+			const uploadedFilePath = path.join(uploadPath, uploadedFile.name);
 
 			await pipeline(readableStream, fs.createWriteStream(uploadedFilePath))
 
@@ -142,10 +141,10 @@ async function createFileDataObject(uploadedFilePath: string) {
 }
 
 async function importFileChunks(chunks: any[]) {
-	client = await weaviate.connectToLocal()
-	const fileChunkCollection = client.collections.get<ChunkObject>('Chunks')
+    client = await weaviate.connectToLocal()
+    const fileChunkCollection = client.collections.get<ChunkObject>('Chunks')
 
-	// Create a log file with timestamp
+    // Create a log file with timestamp
 	const timestamp = new Date().toISOString().replace(/[:.]/g, '-')
 	const logPath = path.join(uploadPath, `chunks-log-${timestamp}.json`)
 
@@ -169,6 +168,6 @@ async function importFileChunks(chunks: any[]) {
 
 	console.log(`Chunk log written to: ${logPath}`)
 
-	const result = await fileChunkCollection.data.insertMany(chunks)
-	console.log('Inserted chunks: ', result)
+    const result = await fileChunkCollection.data.insertMany(chunks)
+    console.log('Inserted chunks: ', result)
 }

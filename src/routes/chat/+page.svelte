@@ -87,18 +87,16 @@
 
 	async function handleSubmit(this: HTMLFormElement, event: Event) {
 		event?.preventDefault()
-		if (response.loading) return // prevent request while waiting for response
-
-		console.log("submission received, default prevented")
-
+		if (response.loading) {
+			console.log("busy")
+			return // prevent request while waiting for response
+		}	
 		const formData: FormData = new FormData(this)
 		const message = formData.get('message')
 
 		if (!message) {
 			return
 		}
-
-		console.log("message extracted")
 
 		chatHistory = [...chatHistory, { role: 'user', content: message as string }]
 
@@ -136,7 +134,6 @@
 
 			console.log(answerText)
 		} catch (error) {
-			console.log("error encountered, caught on page.svelte")
 			console.error(error)
 		}
 	}
@@ -154,11 +151,6 @@
 
 <main class="flex flex-col flex-wrap justify-center gap-4 p-4">
 	<div class="m-auto w-1/2 gap-4 rounded bg-surface-900 p-4">
-		<div>
-			<p>Chatting with:</p>
-			<Avatar src="/img-tutor-girl.png" name="Tutor girl image" />
-			<p></p>
-		</div>
 		<ChatAppBar
 			bind:selectedSystemPrompt={systemPrompt}
 			bind:selectedExamplePrompt={examplePrompt}
@@ -256,7 +248,9 @@
 						<div class="flex items-center gap-4">
 							{#each fileNames as fileName}
 								<div class="flex items-center gap-2">
-									<button type="button" class="btn preset-filled-primary-500">
+									<button
+										type="button"
+										class="btn preset-filled-primary-500">
 										<span>{fileName}</span>
 										<CircleX onclick={() => deleteFileName(fileName)} />
 									</button>
