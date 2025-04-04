@@ -1,0 +1,15 @@
+{
+  "totalChunks": 1,
+  "timestamp": "2025-04-04T02:01:37.122Z",
+  "chunks": [
+    {
+      "text": "CS 3310 Homework 6\nMason Fernandez\nPart 1\n1. Visit the graph in different orders...\n(a) BFS 1,2,4,3,5,7,6,8,9\n(b) DFS 1,2,3,6,5,4,7,8,9\n(c) BFS with a stack 1,4,2,5,3,6,9,8,7\n2.\n(a) Prove G has a unique topological order if and only if there exists a directed path that visits each \nvertex only once.\nA directed acyclic grapth that visits or leaves a vertex more than once creates multiple valid topological \norders because going to each incoming or outgoing edge along the graph in different orders can create \nmultiple valid orders. Therefore, any graph that visits and leaves each node only once, has no \nalternative orders and must be unique for that graph.\n(b) Describe an algorithm to check in linear time to see whether or not G has such a path.\nHasUniquePath(G):\n    For v in graph G\n        if v has >1 incoming edges:\n            return false\n    return true\nThis algorithm assumes the graph is a DAG. It loops over each vertex and checks to see if there are \nmore than one edges to it. If there are for any vertex, the graph doesn’t have a unique path and returns \nfalse. If there are no vertexes with more than one edge, it returns true. The algorithm runs in O(n) time.\nPart 2\n(see hw6.py)",
+      "fileName": "hw6.pdf",
+      "metadata": {
+        "totalPages": 1,
+        "pageNumberLocation": 1,
+        "chunkIndex": 0
+      }
+    }
+  ]
+}

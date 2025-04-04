@@ -52,6 +52,19 @@ async function addCollection() {
 		console.error('Failed to add the Chunks collection')
 	}
 }
+async function getCollectionCount(collectionName: string) {
+	try{
+		const collection: Collection =  await client.collections.get(collectionName)
+		let count = 0
+		for await(const _ of collection.iterator()) {
+			count++
+		}
+		console.log(`the ${collectionName} collection has ${count} items`)
+	} catch (err) {
+		console.error(`failed to get the ${collectionName} collection`)
+	}
+}
+
 
 async function run() {
 	console.log('trying to run create chunks')
@@ -59,8 +72,12 @@ async function run() {
 	console.log('Starting user embedded file schema creation...')
 
 	client = await weaviate.connectToLocal()
-	await addCollection()
+	
+	
 	// await client.collections.delete('Chunks')
+	await addCollection()
+	
+	// await getCollectionCount('Chunks')
 
 	const endTime: Date = new Date()
 	const elapsedTime: number = endTime.getTime() - startTime.getTime()
