@@ -11,6 +11,10 @@ const clipSchema = {
             dataType: 'text' as const,
         },
         {
+            name: 'thumbnailPath',
+            dataType: 'text' as const,
+        },
+        {
            name: 'poster',
            dataType: 'blob' as const,
         },
@@ -43,13 +47,26 @@ async function addCollection() {
     }
 }
 
+async function getCollectionCount(collectionName: string) {
+    try {
+        const collection: Collection = client.collections.get(collectionName)
+        let count = 0
+        for await (const _ of collection.iterator()) {
+            count++
+        }
+        console.log(`The ${collectionName} collection has ${count} items`)
+    } catch (err) {
+        console.error(`Failed to get the ${collectionName} collection`)
+    }
+}
+
 async function run() {
     const startTime: Date = new Date()
     console.log('Starting user embedded file schema creation...')
 
     client = await weaviate.connectToLocal()
+    await client.collections.delete('ImageCollection')
     await addCollection()
-   //await client.collections.delete('ImageCollection')
     //await getCollectionCount('ImageCollection')
 
     const endTime: Date = new Date()
