@@ -17,7 +17,6 @@ let client: WeaviateClient
 function bufferToBase64(buffer: Buffer): string {
 	return buffer.toString('base64')
 }
-
 /**
  * Process an image buffer and store it in the system
  * @param buffer Original image buffer
