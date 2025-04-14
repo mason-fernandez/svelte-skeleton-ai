@@ -5,6 +5,7 @@ import fs from 'fs/promises'
 import path from 'path'
 import { writeFileSync, existsSync, mkdirSync } from 'fs'
 import sharp from 'sharp'
+import { connectToWeaviate } from '$lib/weaviate';
 
 let client: WeaviateClient
 
@@ -18,15 +19,70 @@ function bufferToBase64(buffer: Buffer): string {
 }
 
 /**
+ * Process an image buffer and store it in the system
+ * @param buffer Original image buffer
+ * @param title Image title/description
+ * @returns Object with processing results
+ */
+async function processAndStoreImage(buffer: Buffer, title: string) {
+	try {
+		// Generate a unique ID for this image
+		const imageId = crypto.randomUUID()
+
+		// 1. Create thumbnail
+		const thumbnailBuffer = await sharp(buffer)
+			.resize(200, 200, { fit: 'cover' })
+			.jpeg({ quality: 80 })
+			.toBuffer()
+
+		// 2. Save thumbnail to static folder
+		const thumbnailDir = ensureThumbnailDir()
+		const thumbnailFilename = `${imageId}.jpg`
+		const thumbnailPath = path.join(thumbnailDir, thumbnailFilename)
+
+		writeFileSync(thumbnailPath, thumbnailBuffer)
+
+		// 3. Convert original to base64 for Weaviate
+		const base64Image = bufferToBase64(buffer)
+
+		// 4. Store image data in Weaviate with the imageId
+		const success = await addImageToCollection(title, base64Image, imageId)
+
+		if (success) {
+			return {
+				success: true,
+				imageId,
+				message: `Successfully processed image: ${title}`
+			}
+		} else {
+			// Try to clean up thumbnail if Weaviate insert failed
+			try {
+				await fs.unlink(thumbnailPath)
+			} catch (e) {
+				console.error('Failed to remove thumbnail after failed upload', e)
+			}
+			return {
+				success: false,
+				message: 'Failed to store image in database'
+			}
+		}
+	} catch (error) {
+		return {
+			success: false,
+			message: `Error processing image: ${error instanceof Error ? error.message : 'Unknown error'}`
+		}
+	}
+}
+
+/**
  * Add an image to the ImageCollection
  * @param title Text title for the image
  * @param imageBase64 Base64 encoded image data
  * @param imageId Unique ID for the image
  */
-async function addImageToCollection(title: string, imageBase64: string, imageId: string) {
+async function addImageToCollection(title: string, imageBase64: string, imageId: string): Promise<boolean> {
     try {
       await client.collections.get('ImageCollection').data.insert({
-        id: imageId, // Use the generated ID
         title: title,
         poster: imageBase64,
         thumbnailPath: `/thumbnails/${imageId}.jpg` // Store the path to the thumbnail
@@ -54,7 +110,7 @@ export const actions: Actions = {
 		try {
 			// Initialize Weaviate client if not already done
 			if (!client) {
-				client = await weaviate.connectToLocal()
+				client = await connectToWeaviate()
 			}
 
 			const formData = await request.formData()
@@ -75,7 +131,16 @@ export const actions: Actions = {
 			const arrayBuffer = await imageFile.arrayBuffer()
 			const buffer = Buffer.from(arrayBuffer)
 
-			// 1. Create thumbnail
+			// Process and store the image
+			const result = await processAndStoreImage(buffer, imageTitle)
+
+			return {
+				success: result.success,
+				message: result.message,
+				imageId: result.imageId
+			}
+
+/* 			// 1. Create thumbnail
 			const thumbnailBuffer = await sharp(buffer)
 				.resize(200, 200, { fit: 'cover' })
 				.jpeg({ quality: 80 })
@@ -111,7 +176,7 @@ export const actions: Actions = {
 					success: false,
 					message: 'Failed to store image in database'
 				}
-			}
+			} */
 		} catch (error) {
 			console.error('Error in imageToBase64 action:', error)
 			return {
@@ -126,30 +191,29 @@ export const actions: Actions = {
 export async function load() {
     try {
       if (!client) {
-        client = await weaviate.connectToLocal();
+        client = await connectToWeaviate();
       }
   
-      // Get collection if it exists
       let images: { id: string; title: string; thumbnailUrl: string }[] = [];
       try {
         const collection = client.collections.get('ImageCollection');
         
         // Just get the basic information and thumbnail path
-        for await (let item of collection.iterator()) {
-          if (item && item.properties) {
+        for await (const item of collection.iterator(
+			{
+				returnProperties: ['title', 'thumbnailPath']
+			}
+		)) {
+          if (item) {
             // Map thumbnailPath to thumbnailUrl for the client
             images.push({
               id: item.uuid,
-              title: item.properties.title as string,
-              thumbnailUrl: item.properties.thumbnailPath as string || ''
+              title: String(item.properties?.title || ''),
+              thumbnailUrl: String(item.properties?.thumbnailPath || '')
             });
             
             // Add debug log to see what's happening
-            console.log('Image data:', {
-              id: item.uuid,
-              title: item.properties.title,
-              thumbnailPath: item.properties.thumbnailPath
-            });
+            console.log(`Found ${images.length} images`)
           }
         }
         

@@ -6,12 +6,13 @@
 	const { data, form } = $props<{ data: PageData; form: ActionData }>()
 
 	let selectedFile: File | null = null
-	let previewUrl: string | null = null
-	let loading = false
+	let previewUrl = $state<string | null>(null)
+	let loading = $state(false)
 
 	// Get existing images from server data
 	let images = data.images || []
 
+	const maxSizeInBytes = 10 * 1024 * 1024 // 10MB
 	// Handle file selection
 	function handleFileSelect(event: Event) {
 		const input = event.target as HTMLInputElement
@@ -22,6 +23,11 @@
 		}
 
 		selectedFile = input.files[0]
+		if (selectedFile.size > maxSizeInBytes) {
+			alert('File is too large. Maximum size is 5MB.')
+			input.value = '' // Clear the input
+			return
+		}
 
 		// Create a preview URL for the selected image
 		if (selectedFile && selectedFile.type.startsWith('image/')) {

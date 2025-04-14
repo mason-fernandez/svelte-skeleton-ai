@@ -264,7 +264,7 @@
 	</div>
 </main>
 
-<style lang="postcss">
+<!-- <style lang="postcss">
 	.assistant-chat {
 		@apply rounded-lg bg-primary-100 p-2;
 	}
@@ -305,4 +305,4 @@
 			@apply border-l-4 border-surface-500 pl-4 italic;
 		}
 	}
-</style>
+</style> -->
