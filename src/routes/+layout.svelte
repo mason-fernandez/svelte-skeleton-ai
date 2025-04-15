@@ -17,6 +17,7 @@
 			<div class="flex gap-4">
 				<a class="anchor text-surface-100 font-semibold" href="/">Home</a>
 				<a class="anchor text-surface-100 font-semibold" href="/chat">Chatbot</a>
+				<a class="anchor text-surface-100 font-semibold" href="/images">Images</a>
 				<a class="anchor text-surface-100 font-semibold" href="/check_readiness">Weaviate</a>
 			</div>
 		</div>
