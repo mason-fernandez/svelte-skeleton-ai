@@ -37,14 +37,14 @@
     } */
 </script>
 
-<nav class="bg-primary-800 w-full rounded p-4">
+<nav class="bg-primary-200-800 w-full rounded p-4">
   <div class="h3 mb-4">My AI Chatbot</div>
 	<div class="container mx-auto flex items-center justify-between">
 		<div class="flex items-center space-x-4">
 			<!-- System Prompt Dropdown -->
 			<div class="relative">
 				<select
-					class="btn preset-filled-surface-500 rounded-md px-4 py-2 text-white"
+					class="btn preset-filled-surface-500 rounded-md px-4 py-2"
 					bind:value={selectedSystemPrompt}>
 					<option value="">Choose Role</option>
 					{#each systemPrompts as prompt}
@@ -56,7 +56,7 @@
 			<!-- Example Prompts Dropdown -->
 			<div class="relative">
 				<select
-					class="btn preset-filled-surface-500 rounded-md px-4 py-2 text-white"
+					class="btn preset-filled-surface-500 rounded-md px-4 py-2"
 					bind:value={selectedExamplePrompt}>
 					<option value="">Choose a prompt</option>
 					{#each examplePrompts as prompt}
@@ -67,9 +67,9 @@
 
 			<!-- JSON Mode Toggle -->
 			<div class="flex items-center justify-center flex-wrap">
-				<span class="mr-2 text-white">DeepSeek?</span>
+				<span class="mr-2">DeepSeek?</span>
 				<button
-					class={`h-6 w-12 rounded-full p-1 ${deepSeek ? 'bg-green-400' : 'bg-gray-400'}`}
+					class={`h-6 w-12 rounded-full p-1 ${deepSeek ? 'bg-green-400' : 'bg-gray-400-600'}`}
 					onclick={() => (deepSeek = !deepSeek)}>
 					<div
 						class={`h-4 w-4 transform rounded-full bg-white transition-transform ${

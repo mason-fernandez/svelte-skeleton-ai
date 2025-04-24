@@ -6,7 +6,7 @@
 	let { children } = $props();
 </script>
 
-<nav class="relative w-full bg-surface-900">
+<nav class="relative w-full bg-surface-100-900">
 	<div class="m-auto w-2/3 flex flex-row p-2 justify-between items-center">
 		<div class="flex flex-row items-center gap-4">
 			<a class="flex gap-2" href="/"
@@ -15,10 +15,10 @@
 			>
 
 			<div class="flex gap-4">
-				<a class="anchor text-surface-100 font-semibold" href="/">Home</a>
-				<a class="anchor text-surface-100 font-semibold" href="/chat">Chatbot</a>
-				<a class="anchor text-surface-100 font-semibold" href="/images">Images</a>
-				<a class="anchor text-surface-100 font-semibold" href="/check_readiness">Weaviate</a>
+				<a class="anchor text-surface-900-100 font-semibold" href="/">Home</a>
+				<a class="anchor text-surface-900-100 font-semibold" href="/chat">Chatbot</a>
+				<a class="anchor text-surface-900-100 font-semibold" href="/images">Images</a>
+				<a class="anchor text-surface-900-100 font-semibold" href="/check_readiness">Weaviate</a>
 			</div>
 		</div>
 		
@@ -27,7 +27,7 @@
 			href="https://github.com/mason-fernandez/svelte-skeleton-ai.git"
 			target="_blank"
 		>
-			<p>Github</p>
+			<p class="text-surface-950-50">Github</p>
 			<Github size={20} />
 		</a>
 	</div>

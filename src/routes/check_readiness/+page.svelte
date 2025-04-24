@@ -6,7 +6,7 @@
 </script>
 
 <main class="flex flex-wrap flex-col justify-center gap-4 p-4">
-	<div class="w-1/2 m-auto gap-4 p-4 bg-surface-900 rounded">
+	<div class="w-1/2 m-auto gap-4 p-4 bg-surface-100-900 rounded">
 		<h1 class="h1">Weaviate Connection Status</h1>
         <p>To start the docker container enter <code class="code">docker compose up</code> or to restart enter <code class="code">npm run localDockerRestart</code></p>
 		<div class="flex flex-row items-center m-4 gap-4">

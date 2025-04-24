@@ -150,7 +150,7 @@
 </script>
 
 <main class="flex flex-col flex-wrap justify-center gap-4 p-4">
-	<div class="m-auto w-1/2 gap-4 rounded bg-surface-900 p-4">
+	<div class="m-auto w-1/2 gap-4 rounded bg-surface-100-900 p-4">
 		<ChatAppBar
 			bind:selectedSystemPrompt={systemPrompt}
 			bind:selectedExamplePrompt={examplePrompt}
@@ -167,7 +167,7 @@
 					{#each chatHistory as chat, i}
 						{#if chat.role === 'user'}
 							<div class="ml-auto flex justify-end">
-								<div class="card max-w-xl rounded-xl rounded-tr-none bg-primary-950 p-4">
+								<div class="card max-w-xl rounded-xl rounded-tr-none bg-primary-50-950 p-4">
 									{chat.content}
 								</div>
 							</div>

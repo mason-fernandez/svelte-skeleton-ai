@@ -46,7 +46,7 @@
 </script>
 
 <main class="flex flex-col flex-wrap justify-center gap-4 p-4">
-	<div class="bg-surface-900 m-auto w-1/2 gap-4 rounded p-4">
+	<div class="bg-surface-100-900 m-auto w-1/2 gap-4 rounded p-4">
 		<div class="grid grid-cols-3">
 			<a href="/images" class="btn mt-2 mr-auto p-2">
 				<CircleArrowLeft size={32} />

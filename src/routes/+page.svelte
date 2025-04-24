@@ -3,7 +3,7 @@
 </script>
 
 <main class="flex flex-wrap flex-col justify-center gap-4 p-4">
-	<div class="w-1/2 m-auto gap-4 p-4 bg-surface-900 rounded">
+	<div class="w-1/2 m-auto gap-4 p-4 bg-surface-100-900 rounded">
 		<h1 class="h1">Hi, I'm Mason!</h1>
 		<p class="font-bold my-4">This website hosts my custom <a class="anchor" href="/chat">AI chatbot</a> featuring:</p>
     <ul class="pl-4 list-inside list-disc space-y-2">
@@ -13,7 +13,7 @@
     </ul>
 	</div>
 
-  <div class="flex flex-wrap align-center w-1/2 m-auto gap-4 p-4 bg-surface-900 rounded">
+  <div class="flex flex-wrap align-center w-1/2 m-auto gap-4 p-4 bg-surface-100-900 rounded">
     <div>
       <h3 class="h3">Current Stack</h3>
     <p class="p opacity-75">The current stack for this website is 

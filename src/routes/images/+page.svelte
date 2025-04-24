@@ -63,7 +63,7 @@
 </svelte:head>
 
 <main class="flex flex-col flex-wrap justify-center gap-4 p-4">
-	<div class="bg-surface-900 m-auto w-1/2 gap-4 rounded p-4">
+	<div class="bg-surface-100-900 m-auto w-1/2 gap-4 rounded p-4">
 		<div class="grid grid-cols-3">
 			<div></div>
 			<h1 class="h2 mx-auto pb-4">
@@ -81,7 +81,7 @@
 
 		
 		<div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
-			<div class="bg-surface-700 rounded-lg p-4 shadow-lg">	
+			<div class="bg-surface-300-700 rounded-lg p-4 shadow-lg">	
 				<form
 					method="POST"
 					action="?/imageToBase64"
@@ -111,8 +111,8 @@
 							accept="image/*"
 							required
 							onchange={handleFileSelect}
-							class="file:bg-primary-50 file:text-primary-700 hover:file:bg-primary-100 block
-								   w-full text-sm text-gray-400
+							class="file:bg-primary-50-950 file:text-primary-300-700 hover:file:bg-primary-100-900 block
+								   w-full text-sm text-gray-600-400
 								   file:mr-4 file:rounded-md
 								   file:border-0 file:px-4
 								   file:py-2 file:text-sm
