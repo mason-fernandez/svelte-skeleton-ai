@@ -8,7 +8,6 @@
 	import DOMPurify from 'dompurify'
 	import ChatAppBar from '$lib/components/ChatAppBar.svelte'
 	import FileUploadAside from '$lib/components/FileUploadAside.svelte'
-
 	import { Modal } from '@skeletonlabs/skeleton-svelte'
 
 	let openState = $state(false)
@@ -149,7 +148,7 @@
 </script>
 
 <main class="flex flex-col flex-wrap justify-center gap-4 p-4">
-	<div class="bg-surface-100-900 m-auto w-1/2 gap-4 rounded p-4">
+	<div class="bg-surface-100-900 m-auto w-1/2 gap-4 rounded-xl p-4">
 		<h1>Chat persona creation</h1>
 		<ChatAppBar
 			bind:selectedSystemPrompt={systemPrompt}
@@ -160,7 +159,7 @@
 		<!-- Need to display each chat item here -->
 		{#each chatHistory as chat, i}
 			{#if chat.role === 'user'}
-				<div class="ml-auto flex justify-end">
+				<div class="ml-auto flex justify-end py-2">
 					<div class="card bg-primary-50-950 max-w-xl rounded-xl rounded-br-none p-4">
 						{chat.content}
 					</div>
@@ -168,7 +167,7 @@
 				<!-- this else handles the assistant role chat display -->
 			{:else}
 				<div class="mr-auto flex">
-					<div class="pt-8 mr-24">
+					<div class="mr-24 pt-6 pb-2">
 						{@html chat.content}
 					</div>
 				</div>
@@ -178,7 +177,7 @@
 		{#if response.loading}
 			{#await new Promise((res) => setTimeout(res, 400)) then _}
 				<div class="flex">
-					<div class="pt-8 mr-24">
+					<div class="mr-24 pt-8 pb-4">
 						{#if response.text === ''}
 							<TypingIndicator />
 						{:else}
@@ -189,63 +188,68 @@
 			{/await}
 		{/if}
 	</div>
-	<div class="bg-surface-100-900 m-auto w-1/2 gap-4 rounded p-4">
+	<div class="bg-surface-100-900 m-auto w-1/2 gap-4 rounded-xl p-4">
 		<div class="">
 			<form onsubmit={handleSubmit} class="">
 				<div class="space-y-4">
 					<div class="space-y-4">
 						<div class="flex space-x-4">
 							<textarea
-								class="textarea"
+								class="w-full border-0 p-2 focus:outline-none"
 								required
 								placeholder="Type your message..."
 								name="message"
 								rows="3"
 								bind:value={examplePrompt}></textarea>
 							<div class="flex flex-col items-end justify-around">
-								<button type="submit" class="btn preset-tonal-surface px-4 py-2"
+								<button
+									type="submit"
+									class="btn bg-surface-900-100 text-surface-50-950 rounded-xl py-5"
 									><Send size={36} /></button>
 							</div>
 						</div>
 					</div>
 				</div>
-				<div class="flex justify-between">
-					<Modal
-					bind:open={openState}
-					triggerBase="btn p-2"
-					contentBase="card bg-surface-100-900 p-4 space-y-4 max-w-screen-sm"
-					backdropClasses="">
-					{#snippet trigger()}<CirclePlus />{/snippet}
-					{#snippet content()}
-						<div class="flex flex-col">
-							<div class="flex flex-row items-center justify-between">
-								<h2 class="h2">Upload File</h2>
-								<button type="button" class="btn" onclick={modalClose}>
-									<XCircle size={32} />
-								</button>
-							</div>
+				<div class="flex justify-between pt-2">
+					<div class="flex flex-row">
+						<Modal
+							open={openState}
+							onOpenChange={(e) => (openState = e.open)}
+							triggerBase="btn p-2 mr-2"
+							contentBase="card bg-surface-100-900 p-4 space-y-4 max-w-screen-sm"
+							backdropClasses="">
+							{#snippet trigger()}<CirclePlus />{/snippet}
+							{#snippet content()}
+								<div class="flex flex-col">
+									<div class="flex flex-row items-center justify-between">
+										<h2 class="h2">Upload File</h2>
+										<button type="button" class="btn" onclick={modalClose}>
+											<XCircle size={32} />
+										</button>
+									</div>
 
-							<FileUploadAside />
-						</div>
-					{/snippet}
-				</Modal>
-				<button type="button" class="btn px-auto" onclick={deleteAllChats}
-									><MessageSquareOff /></button>
-				</div>
-				
-				<div class="flex w-full flex-col items-center">
-					{#if fileNames.length > 0}
-						<div class="flex items-center gap-4">
-							{#each fileNames as fileName}
-								<div class="flex items-center gap-2">
-									<button type="button" class="btn preset-filled-primary-500">
-										<span>{fileName}</span>
-										<CircleX onclick={() => deleteFileName(fileName)} />
-									</button>
+									<FileUploadAside />
 								</div>
-							{/each}
+							{/snippet}
+						</Modal>
+						<div class="flex w-full flex-col items-center">
+							{#if fileNames.length > 0}
+								<div class="flex items-center gap-4">
+									{#each fileNames as fileName}
+										<div class="flex items-center gap-2">
+											<button type="button" class="btn preset-outlined-surface-500 rounded-full px-3">
+												<span>{fileName}</span>
+												<CircleX onclick={() => deleteFileName(fileName)} />
+											</button>
+										</div>
+									{/each}
+								</div>
+							{/if}
 						</div>
-					{/if}
+					</div>
+
+					<button type="button" class="btn px-auto" onclick={deleteAllChats}
+						><MessageSquareOff /></button>
 				</div>
 			</form>
 		</div>
