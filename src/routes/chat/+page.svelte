@@ -168,7 +168,7 @@
 				<!-- this else handles the assistant role chat display -->
 			{:else}
 				<div class="mr-auto flex">
-					<div class="py-8 mr-24">
+					<div class="pt-8 mr-24">
 						{@html chat.content}
 					</div>
 				</div>
@@ -178,7 +178,7 @@
 		{#if response.loading}
 			{#await new Promise((res) => setTimeout(res, 400)) then _}
 				<div class="flex">
-					<div class="py-8 mr-24">
+					<div class="pt-8 mr-24">
 						{#if response.text === ''}
 							<TypingIndicator />
 						{:else}
@@ -205,15 +205,14 @@
 							<div class="flex flex-col items-end justify-around">
 								<button type="submit" class="btn preset-tonal-surface px-4 py-2"
 									><Send size={36} /></button>
-								<button type="button" class="px-auto" onclick={deleteAllChats}
-									><MessageSquareOff /></button>
 							</div>
 						</div>
 					</div>
 				</div>
-				<Modal
+				<div class="flex justify-between">
+					<Modal
 					bind:open={openState}
-					triggerBase="btn preset-tonal"
+					triggerBase="btn p-2"
 					contentBase="card bg-surface-100-900 p-4 space-y-4 max-w-screen-sm"
 					backdropClasses="">
 					{#snippet trigger()}<CirclePlus />{/snippet}
@@ -230,6 +229,10 @@
 						</div>
 					{/snippet}
 				</Modal>
+				<button type="button" class="btn px-auto" onclick={deleteAllChats}
+									><MessageSquareOff /></button>
+				</div>
+				
 				<div class="flex w-full flex-col items-center">
 					{#if fileNames.length > 0}
 						<div class="flex items-center gap-4">
