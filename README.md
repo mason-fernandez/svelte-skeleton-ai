@@ -2,6 +2,27 @@
 
 A modern AI chat application built with SvelteKit, featuring vector search, RAG capabilities, and image generation.
 
+## Rubric
+
+- **1** Effectively use Svelte's components and routing mechanisms to provide a UI for your AI features.
+    - I created a navigation bar, a lightswitch, and I utilized the provided components for this site.
+- **2** Work with command-line tools, Git, and NPM to create and manage your project within a real development toolset and history of consistent Git commits.
+    - You can see consistent updates on my GitHub repo and proper storage of environment variables
+- **3** Use Docker compose, images, and containers to configure the LLM, database, and app deployment.
+    - My docker compose is working properly
+- **4** Use modern CSS frameworks and UI tools to make custom, appealing app UI.
+    - Successfully updated to skeleton 3 and tailwind 4
+- **5** Demonstrate a working AI chat interface.
+    - My chat is working with a few customization options
+- **6** Retrieve embeddable data and make it available through a RAG-based UI.
+    - I've got rag working with deepseek and llama 3.2
+- **7**Structure, document, and deploy your final project code according to common industry practices.
+    - I properly store my env files and use api routes, and page routes
+- **8** Design and Develop the major features of your app as uniquely your own.  Do not just copy code from class or online sources.
+    - I added a lightswitch, redesigned the AI chat page, and implemented various modals throughout the app
+- **9** Ensure your app functions properly without errors and exhibits good functionality, well structured data, and quality UI/UX design.
+    - Everything is functioning properly. I also implemented my own theme and added custom icons.
+
 ## Features
 
 - **AI Chat Interface** with custom roles and streaming responses
