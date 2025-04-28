@@ -9,7 +9,6 @@
 	import ChatAppBar from '$lib/components/ChatAppBar.svelte'
 	import FileUploadAside from '$lib/components/FileUploadAside.svelte'
 	import { Modal } from '@skeletonlabs/skeleton-svelte'
-	import { onMount } from 'svelte';
 
 	let openState = $state(false)
 
@@ -148,28 +147,22 @@
 	}
 
 	// Add scroll container reference
-	let chatContainer: HTMLDivElement;
+	let chatContainer: HTMLDivElement
 
 	// Function to scroll to bottom
 	function scrollToBottom() {
-	    if (chatContainer) {
-	        chatContainer.scrollTop = chatContainer.scrollHeight;
-	    }
+		if (chatContainer) {
+			chatContainer.scrollTop = chatContainer.scrollHeight
+		}
 	}
 
 	// Scroll when chat history updates
 	$effect(() => {
-	    if (chatHistory.length > 0) {
-	        setTimeout(scrollToBottom, 100); // Small delay to ensure content is rendered
-	    }
-	});
-
-	// Scroll when streaming response updates
-	$effect(() => {
-	    if (responseText) {
-	        setTimeout(scrollToBottom, 100);
-	    }
-	});
+		if (response.loading || responseText || chatHistory.length > 0) {
+			// Increased delay to ensure content is rendered
+			setTimeout(scrollToBottom, 600)
+		}
+	})
 </script>
 
 <main class="flex flex-col flex-wrap justify-center gap-4 p-4">
@@ -181,11 +174,16 @@
 	</div>
 	<div class="m-auto w-1/2 gap-4 rounded p-4">
 		<!-- Add fixed height container with overflow -->
-		<div 
-			bind:this={chatContainer} 
+		<div
+			bind:this={chatContainer}
 			class="max-h-[60vh] overflow-y-auto pr-4"
 			style="scroll-behavior: smooth;"
-		>
+			>
+			{#if chatHistory.length == 0 && !response.loading}
+				<div class="flex justify-center">
+					<div class="pt-8 pb-4">Ask a question to start the chat</div>
+				</div>
+			{/if}
 			{#each chatHistory as chat, i}
 				{#if chat.role === 'user'}
 					<div class="ml-auto flex justify-end py-2">
@@ -202,7 +200,6 @@
 					</div>
 				{/if}
 			{/each}
-
 			{#if response.loading}
 				{#await new Promise((res) => setTimeout(res, 400)) then _}
 					<div class="flex">
@@ -267,7 +264,9 @@
 								<div class="flex items-center gap-4">
 									{#each fileNames as fileName}
 										<div class="flex items-center gap-2">
-											<button type="button" class="btn preset-outlined-surface-500 rounded-full px-3">
+											<button
+												type="button"
+												class="btn preset-outlined-surface-500 rounded-full px-3">
 												<span>{fileName}</span>
 												<CircleX onclick={() => deleteFileName(fileName)} />
 											</button>

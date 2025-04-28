@@ -1,0 +1,24 @@
+{
+  "totalChunks": 2,
+  "timestamp": "2025-04-28T19:48:33.745Z",
+  "chunks": [
+    {
+      "text": " \nMason Fernandez \n \n \n \n masonfernandez@outlook.com Orem, Utah (253) 227-9698 \n linkedin.com/in/mason-fernandez/ \n \nmasonfernandez.com \n  \n \nTechnical Abilities \n \n   Languages: Python, SQL Databases, Javascript / Typescript, C++ \n   Tools: Figma, Git, Node.js, React, Svelte  \n \nExperience \n \nUX / Product Design Intern \nSolo LLC, Lehi UT \nAugust - December 2024 \n \n● Reduced proposal time by 10% through usability research and incorporating user \nfeedback to streamline the UI. \n● Designed and developed reusable UI components in Figma, coordinating handoff and \ncollaborating with developers to ensure seamless implementation. \n● Led team meetings on FigJam where we developed wireframes, user personas, and \npracticed facilitation and brainstorming. \n \nProjects \n \nPortfolio Site - Personal project featuring latest LLM / web dev technology \n● Utilized OpenAI APIs and Ollama to deploy a local chatbot with custom roles and an \ninput stream, enabling dynamic response loading. \n● Integrated multiple RESTful APIs, including Pokémon and Shark Attack, to experiment \nwith data interactions and enhance website functionality. \n● Implemented RAG functionality as well as interchangeable locally hosted models on \ndocker \n \nRaspberry Pi IoT - Created a Python library for diy open source IOT devices \n● Developed a Python Flask web server to manage and coordinate secure connections \nbetween IoT devices. \n● Used Tauri to create a desktop React application for displaying logs from IoT sensors. \n● Created class diagrams and implemented automated unit testing to ensure the \nscalability and maintaina",
+      "fileName": "Software Resume Apr.pdf",
+      "metadata": {
+        "totalPages": 1,
+        "pageNumberLocation": 1,
+        "chunkIndex": 0
+      }
+    },
+    {
+      "text": "ces. \n● Used Tauri to create a desktop React application for displaying logs from IoT sensors. \n● Created class diagrams and implemented automated unit testing to ensure the \nscalability and maintainability of the project. \n \nEducation \n \nUtah Valley University \nB.S. Computer Science \nSenior, 3.86 GPA \nGraduating May 2025 \n ",
+      "fileName": "Software Resume Apr.pdf",
+      "metadata": {
+        "totalPages": 1,
+        "pageNumberLocation": 1,
+        "chunkIndex": 1
+      }
+    }
+  ]
+}

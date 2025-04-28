@@ -13,6 +13,7 @@ const openai = new OpenAI({
 
 export const POST = async ({ request }) => {
 	try {
+		console.log('Request received at /api/chat')
 		client = await weaviate.connectToLocal()
 		const body: MessageBody = await request.json()
 		const { chats, systemPrompt, deepSeek, fileNames } = body
@@ -41,6 +42,7 @@ export const POST = async ({ request }) => {
 			const currentQuery = chats[chats.length - 1].content
 
 			try {
+				console.log("generating neartext")
 				const result = await chunksCollection.generate.nearText(
 					currentQuery,
 					{ groupedTask: generatePrompt },
@@ -57,7 +59,8 @@ export const POST = async ({ request }) => {
 				return new Response(result.generated, { status: 200 })
 
 			} catch (error) {
-				return new Response('Something went wrong', { status: 500 })
+				console.error('Error generating response:', error)
+				return new Response("Something went wrong", { status: 500 })
 			}
 		} else {
 			const selectedPrompt =
@@ -70,6 +73,7 @@ export const POST = async ({ request }) => {
 			})
 
 			// Create a new ReadableStream for the response
+			console.log('Creating ReadableStream for response')
 			const readableStream = new ReadableStream({
 				async start(controller) {
 					for await (const chunk of stream) {
