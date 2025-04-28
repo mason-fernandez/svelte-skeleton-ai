@@ -9,7 +9,9 @@
     <ul class="pl-4 list-inside list-disc space-y-2">
       <li>Model Selection (deepseek-r1, llama3.2)</li>
       <li>Custom Roles</li>
-      <li>File uploads and RAG functionality</li>
+      <li>Image <a class="anchor" href="/images">vectorization</a> and <a class="anchor" href="/search">search</a></li>
+      <li>File uploads and RAG</li>
+      <li>Image <a class="anchor" href="/images">generation</a></li>
     </ul>
 	</div>
 

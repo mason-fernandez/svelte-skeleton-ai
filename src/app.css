@@ -4,4 +4,17 @@
 @import '@skeletonlabs/skeleton/optional/presets';
 @import '@skeletonlabs/skeleton/themes/cerberus';
 
+@custom-variant dark (&:where([data-mode="dark"], [data-mode="dark"] *));
+
 @source '../node_modules/@skeletonlabs/skeleton-svelte/dist';
+
+[data-mode='dark'] body {
+    background-image:
+      radial-gradient(at 80% 80%, color-mix(in oklab, var(--color-primary-500) 10%, transparent) 0px, transparent 50%),
+      radial-gradient(at 20% 20%, color-mix(in oklab, var(--color-success-500) 10%, transparent) 0px, transparent 50%),
+      radial-gradient(at 100% 64%, color-mix(in oklab, var(--color-error-500) 3%, transparent) 0px, transparent 40%);
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }

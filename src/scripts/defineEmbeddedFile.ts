@@ -74,7 +74,7 @@ async function run() {
 	client = await weaviate.connectToLocal()
 	
 	
-	// await client.collections.delete('Chunks')
+	await client.collections.delete('Chunks')
 	await addCollection()
 	
 	// await getCollectionCount('Chunks')

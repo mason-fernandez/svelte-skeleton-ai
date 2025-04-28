@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Send, FileUp, MessageCircleX, XCircle, CircleX } from 'lucide-svelte'
+	import { Send, FileUp, MessageSquareOff, XCircle, CircleX, CirclePlus } from 'lucide-svelte'
 	import { Avatar } from '@skeletonlabs/skeleton-svelte'
 	import TypingIndicator from '$lib/utils/typingIndicator.svelte'
 	import { readableStreamStore } from '$lib/readableStreamStore.svelte'
@@ -88,9 +88,9 @@
 	async function handleSubmit(this: HTMLFormElement, event: Event) {
 		event?.preventDefault()
 		if (response.loading) {
-			console.log("busy")
+			console.log('busy')
 			return // prevent request while waiting for response
-		}	
+		}
 		const formData: FormData = new FormData(this)
 		const message = formData.get('message')
 
@@ -101,7 +101,7 @@
 		chatHistory = [...chatHistory, { role: 'user', content: message as string }]
 
 		try {
-			console.log("attempting to make POST request")
+			console.log('attempting to make POST request')
 
 			const answer = response.request(
 				new Request('/api/chat', {
@@ -146,56 +146,53 @@
 		// Update the local state instead of the prop
 		fileNames = fileNames.filter((name) => name !== fileName)
 	}
-
 </script>
 
 <main class="flex flex-col flex-wrap justify-center gap-4 p-4">
-	<div class="m-auto w-1/2 gap-4 rounded bg-surface-100-900 p-4">
+	<div class="bg-surface-100-900 m-auto w-1/2 gap-4 rounded p-4">
+		<h1>Chat persona creation</h1>
 		<ChatAppBar
 			bind:selectedSystemPrompt={systemPrompt}
 			bind:selectedExamplePrompt={examplePrompt}
-			bind:deepSeek
-		/>
+			bind:deepSeek />
+	</div>
+	<div class="m-auto w-1/2 gap-4 rounded p-4">
+		<!-- Need to display each chat item here -->
+		{#each chatHistory as chat, i}
+			{#if chat.role === 'user'}
+				<div class="ml-auto flex justify-end">
+					<div class="card bg-primary-50-950 max-w-xl rounded-xl rounded-br-none p-4">
+						{chat.content}
+					</div>
+				</div>
+				<!-- this else handles the assistant role chat display -->
+			{:else}
+				<div class="mr-auto flex">
+					<div class="py-8 mr-24">
+						{@html chat.content}
+					</div>
+				</div>
+			{/if}
+		{/each}
 
+		{#if response.loading}
+			{#await new Promise((res) => setTimeout(res, 400)) then _}
+				<div class="flex">
+					<div class="py-8 mr-24">
+						{#if response.text === ''}
+							<TypingIndicator />
+						{:else}
+							{@html responseText}
+						{/if}
+					</div>
+				</div>
+			{/await}
+		{/if}
+	</div>
+	<div class="bg-surface-100-900 m-auto w-1/2 gap-4 rounded p-4">
 		<div class="">
 			<form onsubmit={handleSubmit} class="">
 				<div class="space-y-4">
-					<div class="flex space-x-2">
-						<div class="card my-2 rounded-tl-none p-4 preset-tonal">Hello! How can I help you?</div>
-					</div>
-					<!-- Need to display each chat item here -->
-					{#each chatHistory as chat, i}
-						{#if chat.role === 'user'}
-							<div class="ml-auto flex justify-end">
-								<div class="card max-w-xl rounded-xl rounded-tr-none bg-primary-50-950 p-4">
-									{chat.content}
-								</div>
-							</div>
-							<!-- this else handles the assistant role chat display -->
-						{:else}
-							<div class="mr-auto flex">
-								<div class="card max-w-xl rounded-xl rounded-tl-none p-4 preset-tonal">
-									{@html chat.content}
-								</div>
-							</div>
-						{/if}
-					{/each}
-
-					{#if response.loading}
-						{#await new Promise((res) => setTimeout(res, 400)) then _}
-							<div class="flex">
-								<div class="flex space-x-2">
-									<div class="assistant-chat">
-										{#if response.text === ''}
-											<TypingIndicator />
-										{:else}
-											{@html responseText}
-										{/if}
-									</div>
-								</div>
-							</div>
-						{/await}
-					{/if}
 					<div class="space-y-4">
 						<div class="flex space-x-4">
 							<textarea
@@ -204,53 +201,41 @@
 								placeholder="Type your message..."
 								name="message"
 								rows="3"
-								bind:value={examplePrompt}
-							></textarea>
-							<div class="flex flex-col justify-around">
-								<button type="submit" class="btn font-bold preset-filled-primary-500"
-									>Send<Send /></button
-								>
-								<div class="flex gap-2">
-									<Modal
-										bind:open={openState}
-										triggerBase="btn preset-tonal"
-										contentBase="card bg-surface-100-900 p-4 space-y-4 max-w-screen-sm"
-										backdropClasses=""
-									>
-										{#snippet trigger()}<FileUp />{/snippet}
-										{#snippet content()}
-											<div class="flex flex-col">
-												<div class="flex flex-row items-center justify-between">
-													<h2 class="h2">Upload File</h2>
-													<button type="button" class="btn" onclick={modalClose}>
-														<XCircle size={32} />
-													</button>
-												</div>
-
-												<FileUploadAside />
-											</div>
-										{/snippet}
-									</Modal>
-									<button type="button" class="btn preset-filled-error-500" onclick={deleteAllChats}
-										><MessageCircleX /></button
-									>
-								</div>
+								bind:value={examplePrompt}></textarea>
+							<div class="flex flex-col items-end justify-around">
+								<button type="submit" class="btn preset-tonal-surface px-4 py-2"
+									><Send size={36} /></button>
+								<button type="button" class="px-auto" onclick={deleteAllChats}
+									><MessageSquareOff /></button>
 							</div>
 						</div>
 					</div>
 				</div>
+				<Modal
+					bind:open={openState}
+					triggerBase="btn preset-tonal"
+					contentBase="card bg-surface-100-900 p-4 space-y-4 max-w-screen-sm"
+					backdropClasses="">
+					{#snippet trigger()}<CirclePlus />{/snippet}
+					{#snippet content()}
+						<div class="flex flex-col">
+							<div class="flex flex-row items-center justify-between">
+								<h2 class="h2">Upload File</h2>
+								<button type="button" class="btn" onclick={modalClose}>
+									<XCircle size={32} />
+								</button>
+							</div>
+
+							<FileUploadAside />
+						</div>
+					{/snippet}
+				</Modal>
 				<div class="flex w-full flex-col items-center">
-					<p class="text-center text-sm text-surface-500">
-						You can also upload a file for additional context to chat with me. I will do my best to
-						help you.
-					</p>
 					{#if fileNames.length > 0}
 						<div class="flex items-center gap-4">
 							{#each fileNames as fileName}
 								<div class="flex items-center gap-2">
-									<button
-										type="button"
-										class="btn preset-filled-primary-500">
+									<button type="button" class="btn preset-filled-primary-500">
 										<span>{fileName}</span>
 										<CircleX onclick={() => deleteFileName(fileName)} />
 									</button>
