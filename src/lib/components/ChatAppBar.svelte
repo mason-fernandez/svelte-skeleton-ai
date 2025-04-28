@@ -1,14 +1,22 @@
 <script lang="ts">
+	import { Pencil, FishSymbol, Sparkle } from 'lucide-svelte'
 	import { Avatar } from '@skeletonlabs/skeleton-svelte'
-	import { Accordion } from '@skeletonlabs/skeleton-svelte'
-	//let { selectedSystemPrompt = $bindable() } = $props()
+	import { Switch } from '@skeletonlabs/skeleton-svelte'
+	import { SYSTEM_PROMPTS, type SystemPromptKey } from '$lib/prompts/systemPrompts'
+	import { Modal } from '@skeletonlabs/skeleton-svelte'
+
+	let openState = $state(false)
+
+	function modalClose() {
+		openState = false
+	}
 
 	let systemPrompts = [
 		'Helpful Assistant',
 		'Emoji Pirate',
 		'Web Development Instructor',
 		'Physics Tutor'
-	]
+	] as const
 
 	let examplePrompts = [
 		'Tell me a joke',
@@ -27,63 +35,77 @@
 		deepSeek?: boolean
 	}>()
 
-	/* 
-    function handleSystemPromptChange(event: Event & { currentTarget: EventTarget & HTMLSelectElement }) {
-        selectedSystemPrompt = (event.currentTarget as HTMLSelectElement).value;
-    }
+	let promptContent = $state('')
 
-    function handleExamplePromptChange(event: Event & { currentTarget: EventTarget & HTMLSelectElement }) {
-        selectedExamplePrompt = event.currentTarget.value;
-    } */
+	$effect(() => {
+		promptContent = selectedSystemPrompt
+			? SYSTEM_PROMPTS[selectedSystemPrompt as SystemPromptKey]
+			: ''
+	})
 </script>
 
-<nav class="bg-primary-200-800 w-full rounded p-4">
-  <div class="h3 mb-4">My AI Chatbot</div>
-	<div class="container mx-auto flex items-center justify-between">
-		<div class="flex items-center space-x-4">
-			<!-- System Prompt Dropdown -->
-			<div class="relative">
-				<select
-					class="btn preset-filled-surface-500 rounded-md px-4 py-2"
-					bind:value={selectedSystemPrompt}>
-					<option value="">Choose Role</option>
-					{#each systemPrompts as prompt}
-						<option value={prompt}>{prompt}</option>
-					{/each}
-				</select>
+<nav class="w-full rounded">
+	<div class="flex justify-between">
+		<div class="my-auto">
+			<div class="rounded-xl">
+				<Avatar size="24" src="img-tutor-girl.png" rounded="" name="filtered" />
 			</div>
-
-			<!-- Example Prompts Dropdown -->
-			<div class="relative">
-				<select
-					class="btn preset-filled-surface-500 rounded-md px-4 py-2"
-					bind:value={selectedExamplePrompt}>
-					<option value="">Choose a prompt</option>
-					{#each examplePrompts as prompt}
-						<option value={prompt}>{prompt}</option>
-					{/each}
-				</select>
+		</div>
+		<div class="m-2 w-full">
+			<div class="align-center flex w-full flex-row justify-between">
+				<div class="flex flex-row gap-2">
+					<span class="h3">{selectedSystemPrompt || 'Select a Role'}</span>
+					<Modal
+						open={openState}
+						onOpenChange={(e) => (openState = e.open)}
+						triggerBase="btn m-0 mt-2 p-0"
+						contentBase="card bg-surface-100-900 p-4 space-y-4 shadow-xl max-w-screen-sm"
+						backdropClasses="backdrop-blur-sm">
+						{#snippet trigger()}<Pencil />{/snippet}
+						{#snippet content()}
+							<header class="flex justify-between">
+								<h2 class="h2">Change Agent</h2>
+							</header>
+							<div class="container mx-auto flex items-center justify-between">
+								<div class="flex items-center space-x-4">
+									<!-- System Prompt Dropdown -->
+									<div class="relative">
+										<select
+											class="btn preset-filled-surface-500 rounded-md px-4 py-2"
+											bind:value={selectedSystemPrompt}>
+											<option value="">Choose Role</option>
+											{#each systemPrompts as prompt}
+												<option value={prompt}>{prompt}</option>
+											{/each}
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="min-h-64 max-h-64 overflow-y-auto">
+								<p class="text-sm whitespace-pre-wrap opacity-75">{promptContent}</p>
+							</div>
+							<footer class="flex justify-end gap-4">
+								<button type="button" class="btn preset-filled" onclick={modalClose}
+									>Confirm</button>
+							</footer>
+						{/snippet}
+					</Modal>
+				</div>
+				<div class="">
+					<span class="">Llama 3.2</span>
+					<Switch
+						controlInactive="bg-secondary-500"
+						checked={deepSeek}
+						onCheckedChange={() => (deepSeek = !deepSeek)}>
+						{#snippet inactiveChild()}<Sparkle size="14" />{/snippet}
+						{#snippet activeChild()}<FishSymbol size="14" />{/snippet}
+					</Switch>
+					<span class="">DeepSeek</span>
+				</div>
 			</div>
-
-			<!-- JSON Mode Toggle -->
-			<div class="flex items-center justify-center flex-wrap">
-				<span class="mr-2">DeepSeek?</span>
-				<button
-					class={`h-6 w-12 rounded-full p-1 ${deepSeek ? 'bg-green-400' : 'bg-gray-400-600'}`}
-					onclick={() => (deepSeek = !deepSeek)}>
-					<div
-						class={`h-4 w-4 transform rounded-full bg-white transition-transform ${
-							deepSeek ? 'translate-x-6' : ''
-						}`}>
-					</div>
-				</button>
+			<div class="max-h-24 min-h-24 overflow-y-auto">
+				<p class="text-sm whitespace-pre-wrap opacity-75">{promptContent}</p>
 			</div>
 		</div>
 	</div>
 </nav>
-
-{#if selectedSystemPrompt}
-	<div class="mt-4 bg-yellow-100 p-4">
-		<p class="text-yellow-800">System Prompt: {selectedSystemPrompt}</p>
-	</div>
-{/if}

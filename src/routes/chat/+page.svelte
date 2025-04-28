@@ -9,6 +9,7 @@
 	import ChatAppBar from '$lib/components/ChatAppBar.svelte'
 	import FileUploadAside from '$lib/components/FileUploadAside.svelte'
 	import { Modal } from '@skeletonlabs/skeleton-svelte'
+	import { onMount } from 'svelte';
 
 	let openState = $state(false)
 
@@ -145,48 +146,77 @@
 		// Update the local state instead of the prop
 		fileNames = fileNames.filter((name) => name !== fileName)
 	}
+
+	// Add scroll container reference
+	let chatContainer: HTMLDivElement;
+
+	// Function to scroll to bottom
+	function scrollToBottom() {
+	    if (chatContainer) {
+	        chatContainer.scrollTop = chatContainer.scrollHeight;
+	    }
+	}
+
+	// Scroll when chat history updates
+	$effect(() => {
+	    if (chatHistory.length > 0) {
+	        setTimeout(scrollToBottom, 100); // Small delay to ensure content is rendered
+	    }
+	});
+
+	// Scroll when streaming response updates
+	$effect(() => {
+	    if (responseText) {
+	        setTimeout(scrollToBottom, 100);
+	    }
+	});
 </script>
 
 <main class="flex flex-col flex-wrap justify-center gap-4 p-4">
 	<div class="bg-surface-100-900 m-auto w-1/2 gap-4 rounded-xl p-4">
-		<h1>Chat persona creation</h1>
 		<ChatAppBar
 			bind:selectedSystemPrompt={systemPrompt}
 			bind:selectedExamplePrompt={examplePrompt}
 			bind:deepSeek />
 	</div>
 	<div class="m-auto w-1/2 gap-4 rounded p-4">
-		<!-- Need to display each chat item here -->
-		{#each chatHistory as chat, i}
-			{#if chat.role === 'user'}
-				<div class="ml-auto flex justify-end py-2">
-					<div class="card bg-primary-50-950 max-w-xl rounded-xl rounded-br-none p-4">
-						{chat.content}
+		<!-- Add fixed height container with overflow -->
+		<div 
+			bind:this={chatContainer} 
+			class="max-h-[60vh] overflow-y-auto pr-4"
+			style="scroll-behavior: smooth;"
+		>
+			{#each chatHistory as chat, i}
+				{#if chat.role === 'user'}
+					<div class="ml-auto flex justify-end py-2">
+						<div class="card bg-primary-50-950 max-w-xl rounded-xl rounded-br-none p-4">
+							{chat.content}
+						</div>
 					</div>
-				</div>
-				<!-- this else handles the assistant role chat display -->
-			{:else}
-				<div class="mr-auto flex">
-					<div class="mr-24 pt-6 pb-2">
-						{@html chat.content}
+					<!-- this else handles the assistant role chat display -->
+				{:else}
+					<div class="mr-auto flex">
+						<div class="mr-24 pt-6 pb-2">
+							{@html chat.content}
+						</div>
 					</div>
-				</div>
-			{/if}
-		{/each}
+				{/if}
+			{/each}
 
-		{#if response.loading}
-			{#await new Promise((res) => setTimeout(res, 400)) then _}
-				<div class="flex">
-					<div class="mr-24 pt-8 pb-4">
-						{#if response.text === ''}
-							<TypingIndicator />
-						{:else}
-							{@html responseText}
-						{/if}
+			{#if response.loading}
+				{#await new Promise((res) => setTimeout(res, 400)) then _}
+					<div class="flex">
+						<div class="mr-24 pt-8 pb-4">
+							{#if response.text === ''}
+								<TypingIndicator />
+							{:else}
+								{@html responseText}
+							{/if}
+						</div>
 					</div>
-				</div>
-			{/await}
-		{/if}
+				{/await}
+			{/if}
+		</div>
 	</div>
 	<div class="bg-surface-100-900 m-auto w-1/2 gap-4 rounded-xl p-4">
 		<div class="">
@@ -255,46 +285,3 @@
 		</div>
 	</div>
 </main>
-
-<!-- <style lang="postcss">
-	.assistant-chat {
-		@apply rounded-lg bg-primary-100 p-2;
-	}
-
-	.assistant-chat :global {
-		ol {
-			@apply ml-4 list-inside list-decimal;
-		}
-		ul {
-			@apply ml-4 list-inside list-disc;
-		}
-		/* Code blocks */
-		/* 	pre {
-			@apply my-4 overflow-x-auto rounded-lg bg-surface-700 p-4;
-		}
-		code {
-			@apply rounded bg-surface-100 px-1 py-0.5 font-mono;
-		}
- */
-		/* Headers */
-		h1 {
-			@apply mb-4 text-2xl font-bold;
-		}
-		h2 {
-			@apply mb-3 text-xl font-bold;
-		}
-		h3 {
-			@apply mb-2 text-lg font-bold;
-		}
-
-		/* Links */
-		a {
-			@apply text-primary-500 hover:underline;
-		}
-
-		/* Blockquotes */
-		blockquote {
-			@apply border-l-4 border-surface-500 pl-4 italic;
-		}
-	}
-</style> -->
