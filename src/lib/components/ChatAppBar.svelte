@@ -4,8 +4,21 @@
 	import { Switch } from '@skeletonlabs/skeleton-svelte'
 	import { SYSTEM_PROMPTS, type SystemPromptKey } from '$lib/prompts/systemPrompts'
 	import { Modal } from '@skeletonlabs/skeleton-svelte'
+	import { onMount } from 'svelte';
 
 	let openState = $state(false)
+	let avatarImages = $state<string[]>([])
+
+	onMount(async () => {
+		try {
+			const response = await fetch('/api/avatars');
+			if (response.ok) {
+				avatarImages = await response.json();
+			}
+		} catch (error) {
+			console.error('Failed to fetch avatars:', error);
+		}
+	});
 
 	function modalClose() {
 		openState = false
@@ -28,12 +41,20 @@
 	let {
 		selectedSystemPrompt = $bindable(systemPrompts[0]),
 		selectedExamplePrompt = $bindable(''),
-		deepSeek = $bindable(false)
+		deepSeek = $bindable(false),
+		selectedAvatar = $bindable('')
 	} = $props<{
 		selectedSystemPrompt?: string
 		selectedExamplePrompt?: string
 		deepSeek?: boolean
+		selectedAvatar?: string
 	}>()
+
+	$effect(() => {
+		if (avatarImages.length > 0 && !selectedAvatar) {
+			selectedAvatar = avatarImages[0];
+		}
+	})
 
 	let promptContent = $state('')
 
@@ -47,8 +68,8 @@
 <nav class="w-full rounded">
 	<div class="flex justify-between">
 		<div class="my-auto">
-			<div class="rounded-xl">
-				<Avatar size="24" src="img-tutor-girl.png" rounded="" name="filtered" />
+			<div class="rounded-xl w-36 h-36 h-max-36">
+				<Avatar size="24" src={selectedAvatar} rounded="" name="filtered" />
 			</div>
 		</div>
 		<div class="m-2 w-full">
@@ -66,7 +87,19 @@
 							<header class="flex justify-between">
 								<h2 class="h2">Change Agent</h2>
 							</header>
-							<div class="container mx-auto flex items-center justify-between">
+							<div class="container mx-auto flex flex-wrap items-center justify-between">
+								<div class="py-4">
+									<select
+										class="btn preset-filled-surface-500 rounded-md px-4 py-2"
+										bind:value={selectedAvatar}>
+										{#each avatarImages as avatar}
+											<option value={avatar}>{avatar.replace(/\.(png|jpg|jpeg|gif)$/i, '')}</option>
+										{/each}
+									</select>
+									<div class="p-4">
+										<Avatar size="" src={selectedAvatar} rounded="" name="filtered" />
+									</div>
+								</div>
 								<div class="flex items-center space-x-4">
 									<!-- System Prompt Dropdown -->
 									<div class="relative">
